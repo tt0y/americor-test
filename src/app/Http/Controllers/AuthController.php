@@ -8,32 +8,32 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     /**
-     * Логин и получение токена.
+     * Login and token retrieval.
      */
     public function login(Request $request)
     {
-        // Валидация входных данных
+        // Input data validation
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
-        // Попытка аутентификации
+        // Authentication attempt
         if (!Auth::attempt($credentials)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        // Получение пользователя
+        // Retrieving the user
         $user = Auth::user();
 
-        // Создание токена
+        // Token creation
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json(['token' => $token], 200);
     }
 
     /**
-     * Выход (удаление токена).
+     * Logout (token deletion).
      */
     public function logout(Request $request)
     {

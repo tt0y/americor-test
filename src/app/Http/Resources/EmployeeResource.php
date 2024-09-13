@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EmployeeResource extends JsonResource
@@ -20,7 +19,7 @@ class EmployeeResource extends JsonResource
             'last_name' => $this->last_name,
             'email' => $this->email,
             'phone' => $this->phone,
-            'company' => new CompanyResource($this->company), // Вложенный ресурс для компании
+            'company' => new CompanyResource($this->company), //Nested resource for the company
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
