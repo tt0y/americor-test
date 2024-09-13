@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\CacheNotAvailableException;
+use App\Http\Requests\StoreEmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 
 class EmployeeController extends Controller
@@ -14,7 +17,7 @@ class EmployeeController extends Controller
      * Display a listing of the resource.
      * @throws CacheNotAvailableException
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         try {
             // Caching the list of employees
@@ -34,7 +37,7 @@ class EmployeeController extends Controller
      * Display the specified resource.
      * @throws CacheNotAvailableException
      */
-    public function show(Employee $employee)
+    public function show(Employee $employee): EmployeeResource
     {
         try {
             // Attempting to cache the employee data
@@ -53,17 +56,9 @@ class EmployeeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreEmployeeRequest $request): EmployeeResource
     {
-        $validated = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'company_id' => 'required|exists:companies,id',
-            'email' => 'nullable|email',
-            'phone' => 'nullable|string|max:15',
-        ]);
-
-        $employee = Employee::create($validated);
+        $employee = Employee::create($request->validated());
 
         // Clear the cache after creating a new employee
         Cache::forget('employees');
@@ -75,17 +70,9 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Employee $employee)
+    public function update(UpdateEmployeeRequest $request, Employee $employee): EmployeeResource
     {
-        $validated = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'company_id' => 'required|exists:companies,id',
-            'email' => 'nullable|email',
-            'phone' => 'nullable|string|max:15',
-        ]);
-
-        $employee->update($validated);
+        $employee->update($request->validated());
 
         // Очищаем кэш после обновления сотрудника
         Cache::forget('employees');
@@ -97,7 +84,7 @@ class EmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Employee $employee)
+    public function destroy(Employee $employee): Response
     {
         $employee->delete();
 

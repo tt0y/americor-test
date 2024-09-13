@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\CacheNotAvailableException;
+use App\Http\Requests\StoreCompanyRequest;
+use App\Http\Requests\UpdateCompanyRequest;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
-use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 
 class CompanyController extends Controller
@@ -14,7 +17,7 @@ class CompanyController extends Controller
      * Display a listing of the resource.
      * @throws CacheNotAvailableException
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         try {
             // Cache the query result for 60 seconds
@@ -34,7 +37,7 @@ class CompanyController extends Controller
      * Display the specified resource.
      * @throws CacheNotAvailableException
      */
-    public function show(Company $company)
+    public function show(Company $company): CompanyResource
     {
         try {
             // Cache the data of a single company
@@ -53,15 +56,9 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCompanyRequest $request): CompanyResource
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|email',
-            'website' => 'nullable|url',
-        ]);
-
-        $company = Company::create($validated);
+        $company = Company::create($request->validated());
 
         // Clear the cache after creating a new company
         Cache::forget('companies');
@@ -72,15 +69,9 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Company $company)
+    public function update(UpdateCompanyRequest $request, Company $company): CompanyResource
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|email',
-            'website' => 'nullable|url',
-        ]);
-
-        $company->update($validated);
+        $company->update($request->validated());
 
         // Clear the cache after updating the company
         Cache::forget('companies');
@@ -92,7 +83,7 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Company $company)
+    public function destroy(Company $company): Response
     {
         $company->delete();
 
