@@ -4,16 +4,9 @@
 
 This project implements a REST API for managing companies and their employees. The application uses **Laravel 11**, **PHP 8.3**, **Sanctum** for authentication, and **Postman** for API testing.
 
-The task description is available via the link
-https://gist.github.com/Fanamurov/e3ac6f4ac881c157f0ea0a33501aaf5f
-
 ## Requirements
-
-- Docker (if using Docker)
-- Docker Compose (if using Docker)
-- PHP 8.3+
-- Composer
-- MySQL
+Full requirements are available via the link
+https://gist.github.com/Fanamurov/e3ac6f4ac881c157f0ea0a33501aaf5f
 
 ## Installation and Setup
 
@@ -96,7 +89,7 @@ After a successful login, you will receive a **Bearer Token**, which must be use
 
 ### 1. Import Postman collection
 
-In the root of the project, you will find a file named **Americor test.postman_collection.json**.
+In the root of the project, you will find a file [Americor test.postman_collection.json](Americor%20test.postman_collection.json).
 
 To use the collection in Postman:
 
