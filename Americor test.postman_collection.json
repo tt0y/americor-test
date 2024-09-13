@@ -1,19 +1,26 @@
 {
 	"info": {
-		"_postman_id": "30ea07bc-a779-4c71-a1ff-34545a7d4966",
+		"_postman_id": "719d1afa-fd19-42bc-9e55-d2d64b516538",
 		"name": "Americor test",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "1808897"
 	},
 	"item": [
 		{
-			"name": "company",
+			"name": "Companies",
 			"item": [
 				{
-					"name": "company list",
+					"name": "[GET] List Companies",
 					"request": {
 						"auth": {
-							"type": "bearer"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessTokken}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "GET",
 						"header": [],
@@ -33,10 +40,17 @@
 					"response": []
 				},
 				{
-					"name": "company by id",
+					"name": "[GET] Get Company by ID",
 					"request": {
 						"auth": {
-							"type": "bearer"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessTokken}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "GET",
 						"header": [],
@@ -57,10 +71,17 @@
 					"response": []
 				},
 				{
-					"name": "company by id",
+					"name": "[PUT] Update Company by ID",
 					"request": {
 						"auth": {
-							"type": "bearer"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessTokken}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "PUT",
 						"header": [],
@@ -90,10 +111,17 @@
 					"response": []
 				},
 				{
-					"name": "company by id",
+					"name": "[DELETE] Delete Company by ID",
 					"request": {
 						"auth": {
-							"type": "bearer"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessTokken}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "DELETE",
 						"header": [],
@@ -114,10 +142,17 @@
 					"response": []
 				},
 				{
-					"name": "company create",
+					"name": "[POST] Create New Company",
 					"request": {
 						"auth": {
-							"type": "bearer"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessTokken}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "POST",
 						"header": [],
@@ -148,13 +183,20 @@
 			]
 		},
 		{
-			"name": "employee",
+			"name": "Employees",
 			"item": [
 				{
-					"name": "employees list",
+					"name": "[GET] List Employees",
 					"request": {
 						"auth": {
-							"type": "bearer"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessTokken}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "GET",
 						"header": [],
@@ -174,10 +216,17 @@
 					"response": []
 				},
 				{
-					"name": "employee by id",
+					"name": "[GET] Get Employee by ID",
 					"request": {
 						"auth": {
-							"type": "bearer"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessTokken}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "GET",
 						"header": [],
@@ -198,10 +247,17 @@
 					"response": []
 				},
 				{
-					"name": "employee by id",
+					"name": "[PUT] Update Employee by ID",
 					"request": {
 						"auth": {
-							"type": "bearer"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessTokken}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "PUT",
 						"header": [],
@@ -231,10 +287,17 @@
 					"response": []
 				},
 				{
-					"name": "employee by id",
+					"name": "[DELETE] Delete Employee by ID",
 					"request": {
 						"auth": {
-							"type": "bearer"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessTokken}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "DELETE",
 						"header": [],
@@ -255,10 +318,17 @@
 					"response": []
 				},
 				{
-					"name": "employee create",
+					"name": "[POST] Create New Employee",
 					"request": {
 						"auth": {
-							"type": "bearer"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessTokken}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "POST",
 						"header": [],
@@ -291,6 +361,45 @@
 		{
 			"name": "login",
 			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"admin@admin.com\",\n    \"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokken}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
