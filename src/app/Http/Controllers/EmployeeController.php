@@ -12,38 +12,40 @@ class EmployeeController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @throws CacheNotAvailableException
      */
     public function index()
     {
         try {
-            // Кэшируем список сотрудников
+            // Caching the list of employees
             $employees = Cache::remember('employees', 60, function () {
                 return Employee::paginate(10);
             });
 
-            // Возвращаем коллекцию сотрудников через ресурс
+            // Returning the collection of employees through a resource
             return EmployeeResource::collection($employees);
         } catch (\Exception $e) {
-            // Если что-то пошло не так с кэшированием, выбрасываем кастомное исключение
+            // If something goes wrong with caching, throw a custom exception
             throw new CacheNotAvailableException();
         }
     }
 
     /**
      * Display the specified resource.
+     * @throws CacheNotAvailableException
      */
     public function show(Employee $employee)
     {
         try {
-            // Попытка кэширования данных сотрудника
+            // Attempting to cache the employee data
             $employee = Cache::remember("employee_{$employee->id}", 60, function () use ($employee) {
                 return $employee;
             });
 
-            // Если кэширование прошло успешно, возвращаем сотрудника через ресурс
+            // If caching is successful, return the employee through a resource
             return new EmployeeResource($employee);
         } catch (\Exception $e) {
-            // Если что-то пошло не так с кэшированием, выбрасываем кастомное исключение
+            // If something goes wrong with caching, throw a custom exception
             throw new CacheNotAvailableException();
         }
     }
@@ -63,7 +65,7 @@ class EmployeeController extends Controller
 
         $employee = Employee::create($validated);
 
-        // Очищаем кэш после создания нового сотрудника
+        // Clear the cache after creating a new employee
         Cache::forget('employees');
 
         return new EmployeeResource($employee);
@@ -99,7 +101,7 @@ class EmployeeController extends Controller
     {
         $employee->delete();
 
-        // Очищаем кэш после удаления сотрудника
+        // Clear the cache after deleting an employee
         Cache::forget('employees');
         Cache::forget("employee_{$employee->id}");
 

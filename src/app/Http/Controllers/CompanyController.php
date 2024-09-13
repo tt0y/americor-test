@@ -12,38 +12,40 @@ class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @throws CacheNotAvailableException
      */
     public function index()
     {
         try {
-            // Кэшируем результат запроса на 60 секунд
+            // Cache the query result for 60 seconds
             $companies = Cache::remember('companies', 60, function () {
                 return Company::paginate(10);
             });
 
-            // Возвращаем коллекцию компаний через ресурс
+            // Return the collection of companies through a resource
             return CompanyResource::collection($companies);
         } catch (\Exception $e) {
-            // Если что-то пошло не так с кэшированием, выбрасываем кастомное исключение
+            // If something goes wrong with caching, throw a custom exception
             throw new CacheNotAvailableException();
         }
     }
 
     /**
      * Display the specified resource.
+     * @throws CacheNotAvailableException
      */
     public function show(Company $company)
     {
         try {
-            // Кэшируем данные одной компании
+            // Cache the data of a single company
             $company = Cache::remember("company_{$company->id}", 60, function () use ($company) {
                 return $company;
             });
 
-            // Возвращаем компанию через ресурс
+            // Return the company through a resource
             return new CompanyResource($company);
         } catch (\Exception $e) {
-            // Если что-то пошло не так с кэшированием, выбрасываем кастомное исключение
+            // If something goes wrong with caching, throw a custom exception
             throw new CacheNotAvailableException();
         }
     }
@@ -61,7 +63,7 @@ class CompanyController extends Controller
 
         $company = Company::create($validated);
 
-        // Очищаем кэш после создания новой компании
+        // Clear the cache after creating a new company
         Cache::forget('companies');
 
         return new CompanyResource($company);
@@ -80,7 +82,7 @@ class CompanyController extends Controller
 
         $company->update($validated);
 
-        // Очищаем кэш после обновления компании
+        // Clear the cache after updating the company
         Cache::forget('companies');
         Cache::forget("company_{$company->id}");
 
@@ -94,7 +96,7 @@ class CompanyController extends Controller
     {
         $company->delete();
 
-        // Очищаем кэш после удаления компании
+        // Clear the cache after deleting the company
         Cache::forget('companies');
         Cache::forget("company_{$company->id}");
 
