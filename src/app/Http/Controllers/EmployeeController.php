@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CacheNotAvailableException;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use phpseclib3\Math\PrimeField\Integer;
 
 class EmployeeController extends Controller
 {
@@ -15,13 +15,18 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        // Кэшируем список сотрудников
-        $employees = Cache::remember('employees', 60, function () {
-            return Employee::paginate(10);
-        });
+        try {
+            // Кэшируем список сотрудников
+            $employees = Cache::remember('employees', 60, function () {
+                return Employee::paginate(10);
+            });
 
-        // Возвращаем коллекцию сотрудников через ресурс
-        return EmployeeResource::collection($employees);
+            // Возвращаем коллекцию сотрудников через ресурс
+            return EmployeeResource::collection($employees);
+        } catch (\Exception $e) {
+            // Если что-то пошло не так с кэшированием, выбрасываем кастомное исключение
+            throw new CacheNotAvailableException();
+        }
     }
 
     /**
@@ -29,13 +34,18 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-        // Кэшируем данные одного сотрудника
-        $employee = Cache::remember("employee_{$employee->id}", 60, function () use ($employee) {
-            return $employee;
-        });
+        try {
+            // Попытка кэширования данных сотрудника
+            $employee = Cache::remember("employee_{$employee->id}", 60, function () use ($employee) {
+                return $employee;
+            });
 
-        // Возвращаем сотрудника через ресурс
-        return new EmployeeResource($employee);
+            // Если кэширование прошло успешно, возвращаем сотрудника через ресурс
+            return new EmployeeResource($employee);
+        } catch (\Exception $e) {
+            // Если что-то пошло не так с кэшированием, выбрасываем кастомное исключение
+            throw new CacheNotAvailableException();
+        }
     }
 
     /**

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CacheNotAvailableException;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use phpseclib3\Math\PrimeField\Integer;
 
 class CompanyController extends Controller
 {
@@ -15,13 +15,18 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        // Кэшируем результат запроса на 60 секунд
-        $companies = Cache::remember('companies', 60, function () {
-            return Company::paginate(10);
-        });
+        try {
+            // Кэшируем результат запроса на 60 секунд
+            $companies = Cache::remember('companies', 60, function () {
+                return Company::paginate(10);
+            });
 
-        // Возвращаем коллекцию компаний через ресурс
-        return CompanyResource::collection($companies);
+            // Возвращаем коллекцию компаний через ресурс
+            return CompanyResource::collection($companies);
+        } catch (\Exception $e) {
+            // Если что-то пошло не так с кэшированием, выбрасываем кастомное исключение
+            throw new CacheNotAvailableException();
+        }
     }
 
     /**
@@ -29,15 +34,19 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        // Кэшируем данные одной компании
-        $company = Cache::remember("company_{$company->id}", 60, function () use ($company) {
-            return $company;
-        });
+        try {
+            // Кэшируем данные одной компании
+            $company = Cache::remember("company_{$company->id}", 60, function () use ($company) {
+                return $company;
+            });
 
-        // Возвращаем компанию через ресурс
-        return new CompanyResource($company);
+            // Возвращаем компанию через ресурс
+            return new CompanyResource($company);
+        } catch (\Exception $e) {
+            // Если что-то пошло не так с кэшированием, выбрасываем кастомное исключение
+            throw new CacheNotAvailableException();
+        }
     }
-
 
     /**
      * Store a newly created resource in storage.
