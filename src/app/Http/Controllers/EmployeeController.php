@@ -20,15 +20,12 @@ class EmployeeController extends Controller
     public function index(): AnonymousResourceCollection
     {
         try {
-            // Caching the list of employees
             $employees = Cache::remember('employees', 60, function () {
                 return Employee::paginate(10);
             });
 
-            // Returning the collection of employees through a resource
             return EmployeeResource::collection($employees);
         } catch (\Exception $e) {
-            // If something goes wrong with caching, throw a custom exception
             throw new CacheNotAvailableException();
         }
     }
@@ -40,15 +37,12 @@ class EmployeeController extends Controller
     public function show(Employee $employee): EmployeeResource
     {
         try {
-            // Attempting to cache the employee data
             $employee = Cache::remember("employee_{$employee->id}", 60, function () use ($employee) {
                 return $employee;
             });
 
-            // If caching is successful, return the employee through a resource
             return new EmployeeResource($employee);
         } catch (\Exception $e) {
-            // If something goes wrong with caching, throw a custom exception
             throw new CacheNotAvailableException();
         }
     }
@@ -76,7 +70,7 @@ class EmployeeController extends Controller
 
         // Clear the cache after updating an employee
         Cache::forget('employees');
-        Cache::forget("employee_{$employee->id}");
+        Cache::forget("employee_$employee->id");
 
         return new EmployeeResource($employee);
     }
@@ -90,7 +84,7 @@ class EmployeeController extends Controller
 
         // Clear the cache after deleting an employee
         Cache::forget('employees');
-        Cache::forget("employee_{$employee->id}");
+        Cache::forget("employee_$employee->id");
 
         return response()->noContent();
     }

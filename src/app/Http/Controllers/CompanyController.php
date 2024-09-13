@@ -20,15 +20,12 @@ class CompanyController extends Controller
     public function index(): AnonymousResourceCollection
     {
         try {
-            // Cache the query result for 60 seconds
             $companies = Cache::remember('companies', 60, function () {
                 return Company::paginate(10);
             });
 
-            // Return the collection of companies through a resource
             return CompanyResource::collection($companies);
         } catch (\Exception $e) {
-            // If something goes wrong with caching, throw a custom exception
             throw new CacheNotAvailableException();
         }
     }
@@ -40,15 +37,12 @@ class CompanyController extends Controller
     public function show(Company $company): CompanyResource
     {
         try {
-            // Cache the data of a single company
             $company = Cache::remember("company_{$company->id}", 60, function () use ($company) {
                 return $company;
             });
 
-            // Return the company through a resource
             return new CompanyResource($company);
         } catch (\Exception $e) {
-            // If something goes wrong with caching, throw a custom exception
             throw new CacheNotAvailableException();
         }
     }
@@ -75,7 +69,7 @@ class CompanyController extends Controller
 
         // Clear the cache after updating the company
         Cache::forget('companies');
-        Cache::forget("company_{$company->id}");
+        Cache::forget("company_$company->id");
 
         return new CompanyResource($company);
     }
@@ -89,7 +83,7 @@ class CompanyController extends Controller
 
         // Clear the cache after deleting the company
         Cache::forget('companies');
-        Cache::forget("company_{$company->id}");
+        Cache::forget("company_$company->id");
 
         return response()->noContent();
     }
