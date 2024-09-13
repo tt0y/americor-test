@@ -4,6 +4,9 @@
 
 This project implements a REST API for managing companies and their employees. The application uses **Laravel 11**, **PHP 8.3**, **Sanctum** for authentication, and **Postman** for API testing.
 
+The task description is available via the link
+https://gist.github.com/Fanamurov/e3ac6f4ac881c157f0ea0a33501aaf5f
+
 ## Requirements
 
 - Docker (if using Docker)
