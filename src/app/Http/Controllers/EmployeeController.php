@@ -74,7 +74,7 @@ class EmployeeController extends Controller
     {
         $employee->update($request->validated());
 
-        // Очищаем кэш после обновления сотрудника
+        // Clear the cache after updating an employee
         Cache::forget('employees');
         Cache::forget("employee_{$employee->id}");
 

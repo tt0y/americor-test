@@ -19,7 +19,7 @@ class EmployeeSeeder extends Seeder
         $faker = Faker::create();
         $companies = Company::all();
 
-        // Для каждой компании создаем 5 случайных сотрудников
+        // For each company, we create 5 random employees
         foreach ($companies as $company) {
             for ($i = 0; $i < 5; $i++) {
                 Employee::create([

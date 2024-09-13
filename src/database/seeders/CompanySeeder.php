@@ -17,7 +17,7 @@ class CompanySeeder extends Seeder
     {
         $faker = Faker::create();
 
-        // Создаем 2 компании с использованием Faker
+        // Creating 2 companies
         for ($i = 0; $i < 2; $i++) {
             Company::create([
                 'name' => $faker->company,
