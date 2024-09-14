@@ -16,12 +16,10 @@ Run the following commands to clone the repository and navigate to the directory
 
 ```bash 
 git clone git@github.com:tt0y/americor-test.git
-cd <your-repository-directory>
 ```
 
 ### 2. Environment setup
-
-Create a `.env` file based on the example:
+cd <your-repository-directory> and create a `.env` file based on the example:
 ```bash 
 cp .env.example .env
 ```
@@ -121,6 +119,12 @@ The collection includes the following requests:
 After making the **Login** request, copy the received token and add it to the `Authorization` header for all subsequent requests. The header format is:
 
 Authorization: Bearer <your_token_here>
+
+## Testing with PHPUnit
+To run the tests, execute the following command:
+```bash 
+php artisan test
+```
 
 ## Shutting down
 
