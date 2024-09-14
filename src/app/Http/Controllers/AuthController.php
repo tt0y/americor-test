@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,7 +11,7 @@ class AuthController extends Controller
     /**
      * Login and token retrieval.
      */
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         // Input data validation
         $credentials = $request->validate([
@@ -27,7 +28,7 @@ class AuthController extends Controller
         $user = Auth::user();
 
         // Token creation
-        $token = $user->createToken('api-token')->plainTextToken;
+        $token = $user?->createToken('api-token')->plainTextToken;
 
         return response()->json(['token' => $token], 200);
     }
@@ -35,7 +36,7 @@ class AuthController extends Controller
     /**
      * Logout (token deletion).
      */
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
 

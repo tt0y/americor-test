@@ -15,6 +15,7 @@ class EmployeeController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
      * @throws CacheNotAvailableException
      */
     public function index(): AnonymousResourceCollection
@@ -26,12 +27,13 @@ class EmployeeController extends Controller
 
             return EmployeeResource::collection($employees);
         } catch (\Exception $e) {
-            throw new CacheNotAvailableException();
+            throw new CacheNotAvailableException;
         }
     }
 
     /**
      * Display the specified resource.
+     *
      * @throws CacheNotAvailableException
      */
     public function show(Employee $employee): EmployeeResource
@@ -43,7 +45,7 @@ class EmployeeController extends Controller
 
             return new EmployeeResource($employee);
         } catch (\Exception $e) {
-            throw new CacheNotAvailableException();
+            throw new CacheNotAvailableException;
         }
     }
 
@@ -59,7 +61,6 @@ class EmployeeController extends Controller
 
         return new EmployeeResource($employee);
     }
-
 
     /**
      * Update the specified resource in storage.

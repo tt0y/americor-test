@@ -25,7 +25,7 @@ class UpdateCompanyRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'nullable|email|unique:companies,email,' . $this->company->id,
+            'email' => 'nullable|email|unique:companies,email,'.$this->company->id,
             'website' => 'nullable|url',
         ];
     }

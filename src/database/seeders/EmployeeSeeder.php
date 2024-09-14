@@ -2,19 +2,17 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Employee;
 use App\Models\Company;
+use App\Models\Employee;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
 
 class EmployeeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $faker = Faker::create();
         $companies = Company::all();

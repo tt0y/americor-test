@@ -2,17 +2,17 @@
 
 namespace Tests\Unit;
 
-use App\Models\User;
-use Tests\TestCase;
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class CompanyTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function it_can_create_a_company()
+    public function it_can_create_a_company(): void
     {
         $user = User::factory()->create();
 
@@ -29,7 +29,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_a_company()
+    public function it_can_get_a_company(): void
     {
         $user = User::factory()->create();
 
@@ -47,7 +47,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function it_can_update_a_company()
+    public function it_can_update_a_company(): void
     {
         $user = User::factory()->create();
 
@@ -66,7 +66,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function it_can_delete_a_company()
+    public function it_can_delete_a_company(): void
     {
         $user = User::factory()->create();
 

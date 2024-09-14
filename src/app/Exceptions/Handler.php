@@ -3,46 +3,43 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
     /**
      * Report or log an exception.
      *
-     * @param \Throwable $exception
-     * @return void
      * @throws Throwable
      */
-    public function report(Throwable $exception): void
+    public function report(Throwable $e): void
     {
-        parent::report($exception);
+        parent::report($e);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Throwable $exception
-     * @return JsonResponse
+     * @param  Request  $request
      */
-    public function render($request, Throwable $exception): JsonResponse
+    public function render($request, Throwable $e): JsonResponse
     {
         // Logging all errors
-        \Log::error($exception->getMessage(), ['exception' => $exception]);
+        \Log::error($e->getMessage(), ['exception' => $e]);
 
         // Handling validation errors
-        if ($exception instanceof ValidationException) {
+        if ($e instanceof ValidationException) {
             return response()->json([
                 'error' => 'Validation Error',
-                'message' => $exception->errors()
+                'message' => $e->errors(),
             ], 422);
         }
 
         // Handling authentication errors
-        if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
+        if ($e instanceof \Illuminate\Auth\AuthenticationException) {
             return response()->json([
                 'error' => 'Authentication Error',
                 'message' => 'Unauthenticated',
@@ -52,7 +49,7 @@ class Handler extends ExceptionHandler
         // Handling any other errors
         return response()->json([
             'error' => 'Internal Server Error',
-            'message' => $exception->getMessage(),
+            'message' => $e->getMessage(),
         ], 500);
     }
 }

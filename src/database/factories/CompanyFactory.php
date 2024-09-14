@@ -9,7 +9,7 @@ class CompanyFactory extends Factory
 {
     protected $model = Company::class;
 
-    public function definition()
+    public function definition(): array
     {
         return [
             'name' => $this->faker->company,

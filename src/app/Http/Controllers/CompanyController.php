@@ -15,6 +15,7 @@ class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
      * @throws CacheNotAvailableException
      */
     public function index(): AnonymousResourceCollection
@@ -26,12 +27,13 @@ class CompanyController extends Controller
 
             return CompanyResource::collection($companies);
         } catch (\Exception $e) {
-            throw new CacheNotAvailableException();
+            throw new CacheNotAvailableException;
         }
     }
 
     /**
      * Display the specified resource.
+     *
      * @throws CacheNotAvailableException
      */
     public function show(Company $company): CompanyResource
@@ -43,7 +45,7 @@ class CompanyController extends Controller
 
             return new CompanyResource($company);
         } catch (\Exception $e) {
-            throw new CacheNotAvailableException();
+            throw new CacheNotAvailableException;
         }
     }
 
